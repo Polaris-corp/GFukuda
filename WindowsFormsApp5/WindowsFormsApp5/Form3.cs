@@ -26,9 +26,9 @@ namespace WindowsFormsApp5
         {
             #region 値の取得と入力チェック
             string userID = textBox1.Text;
-            string userpassword = textBox2.Text;
+            string userPassword = textBox2.Text;
 
-            if (!Get_ID_Pass.Check_Id_Pass(userID, userpassword))
+            if (!GetIDPass.CheckIdPass(userID, userPassword))
             {
                 MessageBox.Show("入力してください");
                 return;
@@ -37,8 +37,8 @@ namespace WindowsFormsApp5
 
             #region IDの存在チェック
             //ID存在チェック　ここから
-            int check_id = Userservice.Check_ID(userID);
-            if (check_id == 0)
+            int checkId = Userservice.CheckID(userID);
+            if (checkId == 0)
             {
                 MessageBox.Show("ユーザーが存在しません");
                 return;
@@ -46,11 +46,11 @@ namespace WindowsFormsApp5
             //ID存在チェック　ここまで
             #endregion
             // IDとPWDの紐づきのデータ受け取り　ここから
-            int check_id_pwd = Userservice.Check_ID_PWD(userID, userpassword);
+            int checkIdPwd = Userservice.CheckIdPwd(userID, userPassword);
             // IDとPWDの紐づきのデータ受け取り　ここまで
 
             //入力チェックここから
-            if (check_id_pwd == 0)
+            if (checkIdPwd == 0)
             {
                 MessageBox.Show("パスワードが間違っています");
                 InsertLoginHistory(userID, false);
@@ -60,18 +60,19 @@ namespace WindowsFormsApp5
 
 
             //IDのヒストリー直近3件取得ここから
-            List<DateTime> get_history_list = Historyservise.Get_History_List(userID);
+            List<DateTime> getHistoryList = Historyservise.GetHistoryList(userID);
             //IDのヒストリー直近3件取得ここまで
 
+            int designationMinutes = 3;
 
-
-            if (get_history_list.Count == 3 && (get_history_list[0] - get_history_list[2]).TotalMinutes <= 3)// 直近3回の試行が3分以内に失敗していた場合
+            //getHistoryList[0]が直近のミス、getHistoryList[2]が最初のミスなので負の値にはならない
+            if (getHistoryList.Count == designationMinutes && (getHistoryList[0] - getHistoryList[2]).TotalMinutes <= designationMinutes)// 直近3回の試行が3分以内に失敗していた場合
             {
 
-                TimeSpan remainingLockout = TimeSpan.FromMinutes(3) - (DateTime.Now - get_history_list[0]);// 残りのロックアウト時間を計算
-                TimeSpan NowFailed = (DateTime.Now - get_history_list[0]);
+                TimeSpan remainingLockout = TimeSpan.FromMinutes(designationMinutes) - (DateTime.Now - getHistoryList[0]);// 残りのロックアウト時間を計算
+                TimeSpan nowFailed = (DateTime.Now - getHistoryList[0]);
 
-                if (NowFailed.Minutes <= 3)//保留
+                if (nowFailed.Minutes <= designationMinutes)
                 {
                     MessageBox.Show($"あと {remainingLockout.Minutes} 分 {remainingLockout.Seconds} 秒、ログインが禁止されています。");
                     return;

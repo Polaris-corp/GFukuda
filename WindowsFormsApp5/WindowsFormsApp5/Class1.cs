@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApp5
 {
-    class Get_ID_Pass
+    class GetIDPass
     {
         /// <summary>
         /// 入力チェックを行う
@@ -15,9 +15,9 @@ namespace WindowsFormsApp5
         /// <param name="userID">userIDが入ります</param>
         /// <param name="userpassword">userpasswordが入ります</param>
         /// <returns>true:どちらか(もしくは両方)の入力がない　false:どちらも入力がある</returns>
-        public static bool Check_Id_Pass(string userID, string userpassword)
+        public static bool CheckIdPass(string userID, string userPassword)
         {
-            if (string.IsNullOrEmpty(userID) || string.IsNullOrEmpty(userpassword))
+            if (string.IsNullOrEmpty(userID) || string.IsNullOrEmpty(userPassword))
             {
               return false;
             }

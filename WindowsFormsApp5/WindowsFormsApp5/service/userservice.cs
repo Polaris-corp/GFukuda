@@ -13,7 +13,7 @@ namespace WindowsFormsApp5.userservice
 {
     public class Userservice
     {
-        public static int Check_ID(string userID)
+        public static int CheckID(string userID)
         {
             int idCount = 0;
             string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
@@ -21,7 +21,13 @@ namespace WindowsFormsApp5.userservice
             {
                 try
                 {
-                    string idQuery = "SELECT COUNT(*) FROM users WHERE ID = @userID";
+                    string idQuery = @"
+                            SELECT
+                                COUNT(*) 
+                            FROM 
+                                users 
+                            WHERE 
+                                ID = @userID";
                     using (MySqlCommand idCommand = new MySqlCommand(idQuery, connection))
                     {
                         idCommand.Parameters.AddWithValue("@userID", userID);
@@ -51,7 +57,7 @@ namespace WindowsFormsApp5.userservice
 
         }
 
-        public static int Check_ID_PWD(string userID, string userpassword)
+        public static int CheckIdPwd(string userID, string userPassword)
         {
             int pwdCount = 0;
             string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
@@ -59,11 +65,11 @@ namespace WindowsFormsApp5.userservice
             {
                 try
                 {
-                    string pwdQuery = "SELECT COUNT(*) FROM users WHERE ID = @userID AND PWD = @userpassword";
+                    string pwdQuery = "SELECT COUNT(*) FROM users WHERE ID = @userID AND PWD = @userPassword";
                     using (MySqlCommand pwdCommand = new MySqlCommand(pwdQuery, connection))
                     {
                         pwdCommand.Parameters.AddWithValue("@userID", userID);
-                        pwdCommand.Parameters.AddWithValue("@userpassword", userpassword);
+                        pwdCommand.Parameters.AddWithValue("@userpassword", userPassword);
                         //接続開始
                         connection.Open();
 
