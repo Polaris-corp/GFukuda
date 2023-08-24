@@ -99,7 +99,20 @@ namespace WindowsFormsApp5
             string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                string insertQuery = "INSERT INTO login_history (userID, logtime, result) VALUES (@userID, @logtime, @result)";
+                string insertQuery = @"
+                       INSERT 
+                       INTO 
+                            login_history 
+                            (
+                            userID
+                            , logtime, result
+                            ) 
+                       VALUES 
+                            (
+                            @userID
+                            , @logtime
+                            , @result
+                            )";
                 using (MySqlCommand insertCommand = new MySqlCommand(insertQuery, connection))
                 {
                     try

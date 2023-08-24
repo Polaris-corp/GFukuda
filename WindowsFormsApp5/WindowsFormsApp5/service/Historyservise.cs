@@ -14,7 +14,8 @@ namespace WindowsFormsApp5.service
 {
     public class Historyservise
     {
-        public static List<DateTime> Get_History_List(string userID)
+        
+        public static List<DateTime> GetHistoryList(string userID)
         {
             List<DateTime> failedLogins = new List<DateTime>();// 失敗したログイン試行の時間を保存するリスト
 
@@ -24,7 +25,18 @@ namespace WindowsFormsApp5.service
                 try
                 {
                     // 直近の3回のログイン試行を確認　ORDER BY logtime DESC LIMIT 3で直近三回
-                    string historyQuery = "SELECT logtime, result FROM login_history WHERE userID = @userID ORDER BY logtime DESC LIMIT 3";
+                    string historyQuery = @"
+                           SELECT 
+                                logtime
+                                , result 
+                           FROM 
+                                login_history 
+                           WHERE 
+                                userID = @userID 
+                           ORDER BY 
+                                logtime DESC 
+                           LIMIT 
+                                3";
                     using (MySqlCommand historyCommand = new MySqlCommand(historyQuery, connection))
                     {
 
