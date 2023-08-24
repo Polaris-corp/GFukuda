@@ -22,12 +22,12 @@ namespace WindowsFormsApp5.userservice
                 try
                 {
                     string idQuery = @"
-                            SELECT
-                                COUNT(*) 
-                            FROM 
-                                users 
-                            WHERE 
-                                ID = @userID";
+                           SELECT
+                               COUNT(*) 
+                           FROM 
+                               users 
+                           WHERE 
+                               ID = @userID";
                     using (MySqlCommand idCommand = new MySqlCommand(idQuery, connection))
                     {
                         idCommand.Parameters.AddWithValue("@userID", userID);
@@ -65,7 +65,15 @@ namespace WindowsFormsApp5.userservice
             {
                 try
                 {
-                    string pwdQuery = "SELECT COUNT(*) FROM users WHERE ID = @userID AND PWD = @userPassword";
+                    string pwdQuery = @"
+                           SELECT 
+                                COUNT(*) 
+                           FROM 
+                                users 
+                           WHERE 
+                                ID = @userID 
+                                AND PWD = @userPassword";
+
                     using (MySqlCommand pwdCommand = new MySqlCommand(pwdQuery, connection))
                     {
                         pwdCommand.Parameters.AddWithValue("@userID", userID);

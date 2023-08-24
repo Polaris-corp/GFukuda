@@ -25,7 +25,18 @@ namespace WindowsFormsApp5.service
                 try
                 {
                     // 直近の3回のログイン試行を確認　ORDER BY logtime DESC LIMIT 3で直近三回
-                    string historyQuery = "SELECT logtime, result FROM login_history WHERE userID = @userID ORDER BY logtime DESC LIMIT 3";
+                    string historyQuery = @"
+                           SELECT 
+                                logtime
+                                , result 
+                           FROM 
+                                login_history 
+                           WHERE 
+                                userID = @userID 
+                           ORDER BY 
+                                logtime DESC 
+                           LIMIT 
+                                3";
                     using (MySqlCommand historyCommand = new MySqlCommand(historyQuery, connection))
                     {
 
