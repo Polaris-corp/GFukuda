@@ -60,17 +60,18 @@ namespace WindowsFormsApp5
 
 
             //IDのヒストリー直近3件取得ここから
-            List<DateTime> getHistoryList = Historyservise.GetHistoryList(userID);
+            List<DateTime> historyList = Historyservise.GetHistoryList(userID);
             //IDのヒストリー直近3件取得ここまで
 
+            //以下メソッド化保留
             int designationMinutes = 3;
 
             //getHistoryList[0]が直近のミス、getHistoryList[2]が最初のミスなので負の値にはならない
-            if (getHistoryList.Count == designationMinutes && (getHistoryList[0] - getHistoryList[2]).TotalMinutes <= designationMinutes)// 直近3回の試行が3分以内に失敗していた場合
+            if (historyList.Count == designationMinutes && (historyList[0] - historyList[2]).TotalMinutes <= designationMinutes)// 直近3回の試行が3分以内に失敗していた場合
             {
 
-                TimeSpan remainingLockout = TimeSpan.FromMinutes(designationMinutes) - (DateTime.Now - getHistoryList[0]);// 残りのロックアウト時間を計算
-                TimeSpan nowFailed = (DateTime.Now - getHistoryList[0]);
+                TimeSpan remainingLockout = TimeSpan.FromMinutes(designationMinutes) - (DateTime.Now - historyList[0]);// 残りのロックアウト時間を計算
+                TimeSpan nowFailed = (DateTime.Now - historyList[0]);
 
                 if (nowFailed.Minutes <= designationMinutes)
                 {
