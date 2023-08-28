@@ -86,7 +86,7 @@ namespace WindowsFormsApp5.service
         /// </summary>
         /// <param name="historyList">直近三回の失敗logが入ったリストです。</param>
         /// <returns>trueの場合、ロックアウト：falseの場合、ログイン成功。</returns>
-        public static bool LockoutJudgement(List<DateTime> historyList)
+        public static bool LockoutJudgement(List<DateTime> historyList,string userID)
         {
             int designationMinutes = 3;
 
@@ -120,6 +120,52 @@ namespace WindowsFormsApp5.service
             }
         }
 
+        /// <summary>
+        /// ログイン試行のログをlogin_historyテーブルに残すメソッド
+        /// </summary>
+        /// <param name="userID">userIDがはいります。</param>
+        /// <param name="loginResult">loginResultがはいります</param>
+        public static void InsertLoginHistory(string userID, bool loginResult)
+        {
+            string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                string insertQuery = @"
+                       INSERT 
+                       INTO 
+                            login_history 
+                            (
+                            userID
+                            , logtime, result
+                            ) 
+                       VALUES 
+                            (
+                            @userID
+                            , @logtime
+                            , @result
+                            )";
+                using (MySqlCommand insertCommand = new MySqlCommand(insertQuery, connection))
+                {
+                    try
+                    {
+                        insertCommand.Parameters.AddWithValue("@userID", userID);
+                        insertCommand.Parameters.AddWithValue("@logtime", DateTime.Now);
+                        insertCommand.Parameters.AddWithValue("@result", loginResult ? 1 : 0);
+
+                        connection.Open();  // 接続を開始します。
+                        insertCommand.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("エラー: " + ex.Message);
+                    }
+                    finally
+                    {
+                        connection.Close();
+                    }
+                }
+            }
+        }
 
     }
 
