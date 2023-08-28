@@ -24,7 +24,7 @@ namespace WindowsFormsApp5.service
         {
             List<DateTime> failedLogins = new List<DateTime>();
 
-            string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
+           const string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 try
@@ -129,7 +129,7 @@ namespace WindowsFormsApp5.service
         /// <param name="loginResult">loginResultがはいります</param>
         public static void InsertLoginHistory(string userID, bool loginResult)
         {
-            string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
+           const string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 string insertQuery = @"
