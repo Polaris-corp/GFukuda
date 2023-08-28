@@ -92,7 +92,7 @@ namespace WindowsFormsApp5.service
             const int ThreeMinutes = 3;
             const int ListElementsCount = 3;
 
-            //getHistoryList[0]は三つの要素のうち、直近のミスを、getHistoryList[2]が最初のミスなので負の値にはならない
+            //historyList[0]は三つの要素のうち、直近のミスを、historyList[2]が最初のミスであり、常に大きい値から小さい値を引くので、負の値にはならない
             if (historyList.Count == ListElementsCount && (historyList[0] - historyList[2]).TotalMinutes <= ThreeMinutes)
             {
                 
