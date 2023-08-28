@@ -22,7 +22,7 @@ namespace WindowsFormsApp5.service
         /// <returns>作成したリスト</returns>
         public static List<DateTime> GetHistoryList(string userID)
         {
-            List<DateTime> failedLogins = new List<DateTime>();// 失敗したログイン試行の時間を保存するリスト
+            List<DateTime> failedLogins = new List<DateTime>();
 
             string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -45,18 +45,19 @@ namespace WindowsFormsApp5.service
                     using (MySqlCommand historyCommand = new MySqlCommand(historyQuery, connection))
                     {
 
-                        historyCommand.Parameters.AddWithValue("@userID", userID);// 渡すパラメータ
+                        historyCommand.Parameters.AddWithValue("@userID", userID);
 
                         //接続開始
                         connection.Open();
-
-                        var reader = historyCommand.ExecuteReader();// SQLクエリを実行
-
-                        while (reader.Read())// クエリの結果を読む
+                        // SQLクエリを実行
+                        var reader = historyCommand.ExecuteReader();
+                        // クエリの結果を読む
+                        while (reader.Read())
                         {
                             if (reader.GetInt32("result") == 0)
                             {
-                                DateTime logtime = reader.GetDateTime("logtime");// 失敗したログインの場合、リストに追加
+                                // 失敗したログインの場合、リストに追加
+                                DateTime logtime = reader.GetDateTime("logtime");
                                 failedLogins.Add(logtime);
                             }
                         }
@@ -91,32 +92,32 @@ namespace WindowsFormsApp5.service
             int designationMinutes = 3;
 
             //getHistoryList[0]が直近のミス、getHistoryList[2]が最初のミスなので負の値にはならない
-            if (historyList.Count == designationMinutes && (historyList[0] - historyList[2]).TotalMinutes <= designationMinutes)// 直近3回の試行が3分以内に失敗していた場合
+            if (historyList.Count == designationMinutes && (historyList[0] - historyList[2]).TotalMinutes <= designationMinutes)
             {
-
-                TimeSpan remainingLockout = TimeSpan.FromMinutes(designationMinutes) - (DateTime.Now - historyList[0]);// 残りのロックアウト時間を計算
+                
+                TimeSpan remainingLockout = TimeSpan.FromMinutes(designationMinutes) - (DateTime.Now - historyList[0]);
                 TimeSpan nowFailed = (DateTime.Now - historyList[0]);
 
                 if (nowFailed.Minutes <= designationMinutes)
                 {
                     MessageBox.Show($"あと {remainingLockout.Minutes} 分 {remainingLockout.Seconds} 秒、ログインが禁止されています。");
-                    return true; // 保留
+                    return true; 
 
                 }
                 else
                 {
                     MessageBox.Show("ログイン成功");
                     InsertLoginHistory(userID, true);
-                    return false;//保留
+                    return false;
                 }
 
-                //IDのヒストリー直近3件取得ここまで
+               
             }
             else
             {
                 MessageBox.Show("ログイン成功");
                 InsertLoginHistory(userID, true);
-                return false; //保留
+                return false; 
             }
         }
 
@@ -151,8 +152,8 @@ namespace WindowsFormsApp5.service
                         insertCommand.Parameters.AddWithValue("@userID", userID);
                         insertCommand.Parameters.AddWithValue("@logtime", DateTime.Now);
                         insertCommand.Parameters.AddWithValue("@result", loginResult ? 1 : 0);
-
-                        connection.Open();  // 接続を開始します。
+                        // 接続を開始します。
+                        connection.Open();  
                         insertCommand.ExecuteNonQuery();
                     }
                     catch (Exception ex)

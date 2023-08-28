@@ -13,6 +13,11 @@ namespace WindowsFormsApp5.userservice
 {
     public class Userservice
     {
+        /// <summary>
+        /// 入力されたuserIDがusersテーブルに存在するか確認するメソッド
+        /// </summary>
+        /// <param name="userID">userIDがはいります。</param>
+        /// <returns>入力されたIDの存在個数</returns>
         public static int CheckID(string userID)
         {
             int idCount = 0;
@@ -57,6 +62,12 @@ namespace WindowsFormsApp5.userservice
 
         }
 
+        /// <summary>
+        /// 入力されたuserPasswordがuserIDと紐づいているか確認するメソッド
+        /// </summary>
+        /// <param name="userID">userIDがはいります。</param>
+        /// <param name="userPassword">userPasswordがはいります。</param>
+        /// <returns>userIDと紐づいているuserPasswordの存在個数</returns>
         public static int CheckIdPwd(string userID, string userPassword)
         {
             int pwdCount = 0;
@@ -88,11 +99,11 @@ namespace WindowsFormsApp5.userservice
                 }
                 catch (MySqlException ex)
                 {
-                    throw;
+                    throw;//保留
                 }
                 catch (Exception ex)
                 {
-                    throw;
+                    throw;//保留
                 }
                 finally
                 {
