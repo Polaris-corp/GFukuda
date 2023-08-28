@@ -20,7 +20,7 @@ namespace WindowsFormsApp5
         {
             InitializeComponent();
         }
-        string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
+        //string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
         Userservice Check_ID_Instance = new Userservice();
         private void button1_Click(object sender, EventArgs e)
         {

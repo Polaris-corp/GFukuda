@@ -89,16 +89,17 @@ namespace WindowsFormsApp5.service
         /// <returns>trueの場合、ロックアウト：falseの場合、ログイン成功。</returns>
         public static bool LockoutJudgement(List<DateTime> historyList,string userID)
         {
-            int designationMinutes = 3;
+            const int ThreeMinutes = 3;
+            const int ListElementsCount = 3;
 
-            //getHistoryList[0]が直近のミス、getHistoryList[2]が最初のミスなので負の値にはならない
-            if (historyList.Count == designationMinutes && (historyList[0] - historyList[2]).TotalMinutes <= designationMinutes)
+            //getHistoryList[0]は三つの要素のうち、直近のミスを、getHistoryList[2]が最初のミスなので負の値にはならない
+            if (historyList.Count == ListElementsCount && (historyList[0] - historyList[2]).TotalMinutes <= ThreeMinutes)
             {
                 
-                TimeSpan remainingLockout = TimeSpan.FromMinutes(designationMinutes) - (DateTime.Now - historyList[0]);
+                TimeSpan remainingLockout = TimeSpan.FromMinutes(ThreeMinutes) - (DateTime.Now - historyList[0]);
                 TimeSpan nowFailed = (DateTime.Now - historyList[0]);
 
-                if (nowFailed.Minutes <= designationMinutes)
+                if (nowFailed.Minutes <= ThreeMinutes)
                 {
                     MessageBox.Show($"あと {remainingLockout.Minutes} 分 {remainingLockout.Seconds} 秒、ログインが禁止されています。");
                     return true; 
