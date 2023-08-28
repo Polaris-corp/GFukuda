@@ -63,35 +63,38 @@ namespace WindowsFormsApp5
             List<DateTime> historyList = Historyservise.GetHistoryList(userID);
             //IDのヒストリー直近3件取得ここまで
 
-            //以下メソッド化保留
-            int designationMinutes = 3;
+            // ロックアウトの判断
+            bool lockoutJudgement = Historyservise.LockoutJudgement(historyList);
 
-            //getHistoryList[0]が直近のミス、getHistoryList[2]が最初のミスなので負の値にはならない
-            if (historyList.Count == designationMinutes && (historyList[0] - historyList[2]).TotalMinutes <= designationMinutes)// 直近3回の試行が3分以内に失敗していた場合
-            {
+            ////以下メソッド化保留
+            //int designationMinutes = 3;
 
-                TimeSpan remainingLockout = TimeSpan.FromMinutes(designationMinutes) - (DateTime.Now - historyList[0]);// 残りのロックアウト時間を計算
-                TimeSpan nowFailed = (DateTime.Now - historyList[0]);
+            ////getHistoryList[0]が直近のミス、getHistoryList[2]が最初のミスなので負の値にはならない
+            //if (historyList.Count == designationMinutes && (historyList[0] - historyList[2]).TotalMinutes <= designationMinutes)// 直近3回の試行が3分以内に失敗していた場合
+            //{
 
-                if (nowFailed.Minutes <= designationMinutes)
-                {
-                    MessageBox.Show($"あと {remainingLockout.Minutes} 分 {remainingLockout.Seconds} 秒、ログインが禁止されています。");
-                    return;
+            //    TimeSpan remainingLockout = TimeSpan.FromMinutes(designationMinutes) - (DateTime.Now - historyList[0]);// 残りのロックアウト時間を計算
+            //    TimeSpan nowFailed = (DateTime.Now - historyList[0]);
 
-                }
-                else
-                {
-                    MessageBox.Show("ログイン成功");
-                    InsertLoginHistory(userID, true);
-                }
+            //    if (nowFailed.Minutes <= designationMinutes)
+            //    {
+            //        MessageBox.Show($"あと {remainingLockout.Minutes} 分 {remainingLockout.Seconds} 秒、ログインが禁止されています。");
+            //        return;
 
-                //IDのヒストリー直近3件取得ここまで
-            }
-            else
-            {
-                MessageBox.Show("ログイン成功");
-                InsertLoginHistory(userID, true);
-            }
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("ログイン成功");
+            //        InsertLoginHistory(userID, true);
+            //    }
+
+            //    //IDのヒストリー直近3件取得ここまで
+            //}
+            //else
+            //{
+            //    MessageBox.Show("ログイン成功");
+            //    InsertLoginHistory(userID, true);
+            //}
 
         }
 

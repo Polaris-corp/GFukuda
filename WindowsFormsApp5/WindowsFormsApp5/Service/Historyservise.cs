@@ -14,7 +14,12 @@ namespace WindowsFormsApp5.service
 {
     public class Historyservise
     {
-        
+
+        /// <summary>
+        /// login_historyから、直近三回の失敗logを保存するリストを作成するメソッドです。
+        /// </summary>
+        /// <param name="userID">userIDが入ります</param>
+        /// <returns>作成したリスト</returns>
         public static List<DateTime> GetHistoryList(string userID)
         {
             List<DateTime> failedLogins = new List<DateTime>();// 失敗したログイン試行の時間を保存するリスト
@@ -76,6 +81,44 @@ namespace WindowsFormsApp5.service
             }
         }
 
+        /// <summary>
+        /// ロックアウトになるか判断するメソッドです。
+        /// </summary>
+        /// <param name="historyList">直近三回の失敗logが入ったリストです。</param>
+        /// <returns>trueの場合、ロックアウト：falseの場合、ログイン成功。</returns>
+        public static bool LockoutJudgement(List<DateTime> historyList)
+        {
+            int designationMinutes = 3;
+
+            //getHistoryList[0]が直近のミス、getHistoryList[2]が最初のミスなので負の値にはならない
+            if (historyList.Count == designationMinutes && (historyList[0] - historyList[2]).TotalMinutes <= designationMinutes)// 直近3回の試行が3分以内に失敗していた場合
+            {
+
+                TimeSpan remainingLockout = TimeSpan.FromMinutes(designationMinutes) - (DateTime.Now - historyList[0]);// 残りのロックアウト時間を計算
+                TimeSpan nowFailed = (DateTime.Now - historyList[0]);
+
+                if (nowFailed.Minutes <= designationMinutes)
+                {
+                    MessageBox.Show($"あと {remainingLockout.Minutes} 分 {remainingLockout.Seconds} 秒、ログインが禁止されています。");
+                    return true; // 保留
+
+                }
+                else
+                {
+                    MessageBox.Show("ログイン成功");
+                    InsertLoginHistory(userID, true);
+                    return false;//保留
+                }
+
+                //IDのヒストリー直近3件取得ここまで
+            }
+            else
+            {
+                MessageBox.Show("ログイン成功");
+                InsertLoginHistory(userID, true);
+                return false; //保留
+            }
+        }
 
 
     }
