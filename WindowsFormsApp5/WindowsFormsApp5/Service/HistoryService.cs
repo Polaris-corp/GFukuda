@@ -16,7 +16,7 @@ namespace WindowsFormsApp5.service
     {
 
         /// <summary>
-        /// login_historyから、直近三回の失敗logを保存するリストを作成するメソッドです。
+        /// login_historyから、直近三回の失敗logを降順で保存するリストを作成するメソッドです。
         /// </summary>
         /// <param name="userID">userIDが入ります</param>
         /// <returns>作成したリスト</returns>
@@ -91,8 +91,8 @@ namespace WindowsFormsApp5.service
         {
             const int ThreeMinutes = 3;
             const int ListElementsCount = 3;
-
-            //historyList[0]は三つの要素のうち、直近のミスを、historyList[2]が最初のミスであり、常に大きい値から小さい値を引くので、負の値にはならない
+            //historyListには3件の要素が入っている。降順で入っているので順序は[直近のミスの時間、2番目のミスの時間、最初のミスの時間]になる。
+            //historyList[0] - historyList[2]は、常に大きい値から小さい値を引くので、負の値になることはない。
             if (historyList.Count == ListElementsCount && (historyList[0] - historyList[2]).TotalMinutes <= ThreeMinutes)
             {
                 
