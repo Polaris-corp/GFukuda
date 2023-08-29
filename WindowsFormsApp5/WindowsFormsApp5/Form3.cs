@@ -78,7 +78,4 @@ namespace WindowsFormsApp5
         }
     }
     
-
-
-
 }
