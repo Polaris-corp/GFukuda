@@ -21,7 +21,7 @@ namespace WindowsFormsApp5.userservice
         public static int CheckID(string userID)
         {
             int idCount = 0;
-            string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
+            const string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 try
@@ -71,7 +71,7 @@ namespace WindowsFormsApp5.userservice
         public static int CheckIdPwd(string userID, string userPassword)
         {
             int pwdCount = 0;
-            string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
+            const string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 try
