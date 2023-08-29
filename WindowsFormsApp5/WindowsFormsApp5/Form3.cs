@@ -21,8 +21,7 @@ namespace WindowsFormsApp5
         {
             InitializeComponent();
         }
-        //string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
-       // Userservice Check_ID_Instance = new Userservice();　余分な宣言は消す
+
         private void button1_Click(object sender, EventArgs e)
         {
             #region 値の取得と入力チェック
