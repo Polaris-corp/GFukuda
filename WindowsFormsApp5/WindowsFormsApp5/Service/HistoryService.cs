@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsFormsApp5.userservice;
+using WindowsFormsApp5.Constant;
 
 namespace WindowsFormsApp5.service
 {
@@ -23,9 +24,7 @@ namespace WindowsFormsApp5.service
         public static List<DateTime> GetHistoryList(string userID)
         {
             List<DateTime> failedLogins = new List<DateTime>();
-
-           const string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
             {
                     // 直近の3回のログイン試行を確認　ORDER BY logtime DESC LIMIT 3で直近三回
                     string historyQuery = @"
@@ -111,8 +110,7 @@ namespace WindowsFormsApp5.service
         /// <param name="loginResult">loginResultがはいります</param>
         public static void InsertLoginHistory(string userID, bool loginResult)
         {
-           const string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
             {
                 string insertQuery = @"
                        INSERT 

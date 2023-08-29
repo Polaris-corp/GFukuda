@@ -23,8 +23,7 @@ namespace WindowsFormsApp5.userservice
         public static int CheckID(string userID)
         {
             int idCount = 0;
-            //const string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
-            using (MySqlConnection connection = new MySqlConnection(Constant.Constant.ConnectionString))
+            using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
             {
                 string idQuery = @"
                         SELECT
@@ -55,7 +54,7 @@ namespace WindowsFormsApp5.userservice
         public static int CheckIdPwd(string userID, string userPassword)
         {
             int pwdCount = 0;
-            using (MySqlConnection connection = new MySqlConnection(Constant.Constant.ConnectionString))
+            using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
             {
                 string pwdQuery = @"
                         SELECT 
