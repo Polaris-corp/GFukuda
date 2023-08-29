@@ -56,45 +56,26 @@ namespace WindowsFormsApp5.userservice
             const string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                try
+                string pwdQuery = @"
+                        SELECT 
+                            COUNT(*) 
+                        FROM 
+                            users 
+                        WHERE 
+                            ID = @userID 
+                            AND PWD = @userPassword";
+                using (MySqlCommand pwdCommand = new MySqlCommand(pwdQuery, connection))
                 {
-                    string pwdQuery = @"
-                           SELECT 
-                                COUNT(*) 
-                           FROM 
-                                users 
-                           WHERE 
-                                ID = @userID 
-                                AND PWD = @userPassword";
+                    pwdCommand.Parameters.AddWithValue("@userID", userID);
+                    pwdCommand.Parameters.AddWithValue("@userpassword", userPassword);
+                    //接続開始
+                    connection.Open();
 
-                    using (MySqlCommand pwdCommand = new MySqlCommand(pwdQuery, connection))
-                    {
-                        pwdCommand.Parameters.AddWithValue("@userID", userID);
-                        pwdCommand.Parameters.AddWithValue("@userpassword", userPassword);
-                        //接続開始
-                        connection.Open();
-
-                        pwdCount = Convert.ToInt32(pwdCommand.ExecuteScalar());
-                        return pwdCount;
-                    }
-
+                    pwdCount = Convert.ToInt32(pwdCommand.ExecuteScalar());
+                    return pwdCount;
                 }
-                catch (MySqlException ex)
-                {
-                    throw;//保留
-                }
-                catch (Exception ex)
-                {
-                    throw;//保留
-                }
-                finally
-                {
-                    //接続解除
-                    connection.Close();
-                }
+                
             }
         }
-
-
     }
 }

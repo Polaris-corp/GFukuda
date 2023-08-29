@@ -27,8 +27,6 @@ namespace WindowsFormsApp5.service
            const string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                try
-                {
                     // 直近の3回のログイン試行を確認　ORDER BY logtime DESC LIMIT 3で直近三回
                     string historyQuery = @"
                            SELECT 
@@ -44,7 +42,6 @@ namespace WindowsFormsApp5.service
                                 3";
                     using (MySqlCommand historyCommand = new MySqlCommand(historyQuery, connection))
                     {
-
                         historyCommand.Parameters.AddWithValue("@userID", userID);
 
                         //接続開始
@@ -64,21 +61,6 @@ namespace WindowsFormsApp5.service
                         reader.Close();
                         return failedLogins;
                     }
-
-                }
-                catch (MySqlException )
-                {
-                    throw;
-                }
-                catch (Exception )
-                {
-                    throw;
-                }
-                finally
-                {
-                    //接続解除
-                    connection.Close();
-                }
             }
         }
 
