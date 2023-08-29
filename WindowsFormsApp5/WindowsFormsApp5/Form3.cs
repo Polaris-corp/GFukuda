@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsFormsApp5.service;
 using WindowsFormsApp5.userservice;
+using WindowsFormsApp5.Constant;
 
 
 namespace WindowsFormsApp5
@@ -68,7 +69,18 @@ namespace WindowsFormsApp5
                 //IDのヒストリー直近3件取得ここまで
 
                 // ロックアウトの判断
-                Historyservise.LockoutJudgement(historyList, userID);
+                TimeSpan remainingLockout = TimeSpan.FromMinutes(Constants.LockoutTime) - (DateTime.Now - historyList[0]);
+                TimeSpan nowFailed = (DateTime.Now - historyList[0]);
+
+                if (Historyservise.LockoutJudgement(historyList, userID))
+                {
+                    MessageBox.Show($"あと {remainingLockout.Minutes} 分 {remainingLockout.Seconds} 秒、ログインが禁止されています。");
+                }
+                else
+                {
+                    MessageBox.Show("ログイン成功");
+                    Historyservise.InsertLoginHistory(userID, true);
+                }
 
             }
             catch(Exception ex)

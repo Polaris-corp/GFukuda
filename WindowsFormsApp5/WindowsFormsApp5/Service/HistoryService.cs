@@ -26,8 +26,8 @@ namespace WindowsFormsApp5.service
             List<DateTime> failedLogins = new List<DateTime>();
             using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
             {
-                    // 直近の3回のログイン試行を確認　ORDER BY logtime DESC LIMIT 3で直近三回
-                    string historyQuery = @"
+                // 直近の3回のログイン試行を確認　ORDER BY logtime DESC LIMIT 3で直近三回
+                string historyQuery = @"
                            SELECT 
                                 logtime
                                 , result 
@@ -39,27 +39,27 @@ namespace WindowsFormsApp5.service
                                 logtime DESC 
                            LIMIT 
                                 3";
-                    using (MySqlCommand historyCommand = new MySqlCommand(historyQuery, connection))
-                    {
-                        historyCommand.Parameters.AddWithValue("@userID", userID);
+                using (MySqlCommand historyCommand = new MySqlCommand(historyQuery, connection))
+                {
+                    historyCommand.Parameters.AddWithValue("@userID", userID);
 
-                        //接続開始
-                        connection.Open();
-                        // SQLクエリを実行
-                        var reader = historyCommand.ExecuteReader();
-                        // クエリの結果を読む
-                        while (reader.Read())
+                    //接続開始
+                    connection.Open();
+                    // SQLクエリを実行
+                    var reader = historyCommand.ExecuteReader();
+                    // クエリの結果を読む
+                    while (reader.Read())
+                    {
+                        if (reader.GetInt32("result") == 0)
                         {
-                            if (reader.GetInt32("result") == 0)
-                            {
-                                // 失敗したログインの場合、リストに追加
-                                DateTime logtime = reader.GetDateTime("logtime");
-                                failedLogins.Add(logtime);
-                            }
+                            // 失敗したログインの場合、リストに追加
+                            DateTime logtime = reader.GetDateTime("logtime");
+                            failedLogins.Add(logtime);
                         }
-                        reader.Close();
-                        return failedLogins;
                     }
+                    reader.Close();
+                    return failedLogins;
+                }
             }
         }
 
@@ -68,36 +68,49 @@ namespace WindowsFormsApp5.service
         /// </summary>
         /// <param name="historyList">直近三回の失敗logが入ったリストです。</param>
         /// <returns>trueの場合、ロックアウト：falseの場合、ログイン成功。</returns>
-        public static bool LockoutJudgement(List<DateTime> historyList,string userID)
+        public static bool LockoutJudgement(List<DateTime> historyList, string userID)
         {
             //historyListには3件の要素が入っている。降順で入っているので順序は[直近のミスの時間、2番目のミスの時間、最初のミスの時間]になる。
             //historyList[0] - historyList[2]は、常に大きい値から小さい値を引くので、負の値になることはない。
-            if (historyList.Count == Constants.ListElementsCount && (historyList[0] - historyList[2]).TotalMinutes <= Constants.LockoutTime)
+            //if (historyList.Count == Constants.ListElementsCount && (historyList[0] - historyList[2]).TotalMinutes <= Constants.LockoutTime)
+            //{
+            //    TimeSpan remainingLockout = TimeSpan.FromMinutes(Constants.LockoutTime) - (DateTime.Now - historyList[0]);
+            //    TimeSpan nowFailed = (DateTime.Now - historyList[0]);
+
+            //    if (nowFailed.Minutes <= Constants.LockoutTime)
+            //    {
+            //        MessageBox.Show($"あと {remainingLockout.Minutes} 分 {remainingLockout.Seconds} 秒、ログインが禁止されています。");
+            //        return true; 
+
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("ログイン成功");
+            //        InsertLoginHistory(userID, true);
+            //        return false;
+            //    }
+            //}
+            //else
+            //{
+            //    MessageBox.Show("ログイン成功");
+            //    InsertLoginHistory(userID, true);
+            //    return false; 
+            //}
+
+            TimeSpan remainingLockout = TimeSpan.FromMinutes(Constants.LockoutTime) - (DateTime.Now - historyList[0]);
+            TimeSpan nowFailed = (DateTime.Now - historyList[0]);
+
+            if (historyList.Count == Constants.ListElementsCount && (historyList[0] - historyList[2]).TotalMinutes <= Constants.LockoutTime && nowFailed.Minutes <= Constants.LockoutTime)
             {
-                
-                TimeSpan remainingLockout = TimeSpan.FromMinutes(Constants.LockoutTime) - (DateTime.Now - historyList[0]);
-                TimeSpan nowFailed = (DateTime.Now - historyList[0]);
-
-                if (nowFailed.Minutes <= Constants.LockoutTime)
-                {
-                    MessageBox.Show($"あと {remainingLockout.Minutes} 分 {remainingLockout.Seconds} 秒、ログインが禁止されています。");
-                    return true; 
-
-                }
-                else
-                {
-                    MessageBox.Show("ログイン成功");
-                    InsertLoginHistory(userID, true);
-                    return false;
-                }
-
-               
+                return true;
+            }
+            else if (historyList.Count == Constants.ListElementsCount && (historyList[0] - historyList[2]).TotalMinutes <= Constants.LockoutTime)
+            {
+                return false;
             }
             else
             {
-                MessageBox.Show("ログイン成功");
-                InsertLoginHistory(userID, true);
-                return false; 
+                return false;
             }
         }
 
@@ -127,14 +140,15 @@ namespace WindowsFormsApp5.service
                             )";
                 using (MySqlCommand insertCommand = new MySqlCommand(insertQuery, connection))
                 {
-                        insertCommand.Parameters.AddWithValue("@userID", userID);
-                        insertCommand.Parameters.AddWithValue("@logtime", DateTime.Now);
-                        insertCommand.Parameters.AddWithValue("@result", loginResult ? 1 : 0);
-                        // 接続を開始します。
-                        connection.Open();  
-                        insertCommand.ExecuteNonQuery();
+                    insertCommand.Parameters.AddWithValue("@userID", userID);
+                    insertCommand.Parameters.AddWithValue("@logtime", DateTime.Now);
+                    insertCommand.Parameters.AddWithValue("@result", loginResult ? 1 : 0);
+                    // 接続を開始します。
+                    connection.Open();
+                    insertCommand.ExecuteNonQuery();
                 }
             }
         }
+
     }
 }
