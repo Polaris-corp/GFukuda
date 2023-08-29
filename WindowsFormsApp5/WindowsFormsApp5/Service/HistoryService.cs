@@ -130,27 +130,14 @@ namespace WindowsFormsApp5.service
                             )";
                 using (MySqlCommand insertCommand = new MySqlCommand(insertQuery, connection))
                 {
-                    try
-                    {
                         insertCommand.Parameters.AddWithValue("@userID", userID);
                         insertCommand.Parameters.AddWithValue("@logtime", DateTime.Now);
                         insertCommand.Parameters.AddWithValue("@result", loginResult ? 1 : 0);
                         // 接続を開始します。
                         connection.Open();  
                         insertCommand.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("エラー: " + ex.Message);
-                    }
-                    finally
-                    {
-                        connection.Close();
-                    }
                 }
             }
         }
-
     }
-
 }
