@@ -24,42 +24,24 @@ namespace WindowsFormsApp5.userservice
             const string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                try
+                string idQuery = @"
+                        SELECT
+                            COUNT(*) 
+                        FROM    
+                            users 
+                        WHERE 
+                            ID = @userID";
+                using (MySqlCommand idCommand = new MySqlCommand(idQuery, connection))
                 {
-                    string idQuery = @"
-                           SELECT
-                               COUNT(*) 
-                           FROM 
-                               users 
-                           WHERE 
-                               ID = @userID";
-                    using (MySqlCommand idCommand = new MySqlCommand(idQuery, connection))
-                    {
-                        idCommand.Parameters.AddWithValue("@userID", userID);
+                    idCommand.Parameters.AddWithValue("@userID", userID);
 
-                        //接続開始
-                        connection.Open();
+                    //接続開始
+                    connection.Open();
 
-                        idCount = Convert.ToInt32(idCommand.ExecuteScalar());
-                        return idCount;
-                    }
-                }
-                catch (MySqlException ex)
-                {
-                    throw;
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-                finally
-                {
-                    //接続解除
-                    connection.Close();
+                    idCount = Convert.ToInt32(idCommand.ExecuteScalar());
+                    return idCount;
                 }
             }
-
-
         }
 
         /// <summary>
