@@ -37,39 +37,44 @@ namespace WindowsFormsApp5
 
             #region IDの存在チェック
             //ID存在チェック　ここから
-            int checkId = Userservice.CheckID(userID);
-            if (checkId == 0)
+            try
             {
-                MessageBox.Show("ユーザーが存在しません");
-                return;
-            }
-            //ID存在チェック　ここまで
-            #endregion
-            // IDとPWDの紐づきのデータ受け取り　ここから
-            int checkIdPwd = Userservice.CheckIdPwd(userID, userPassword);
-            // IDとPWDの紐づきのデータ受け取り　ここまで
 
-            //入力チェックここから
-            if (checkIdPwd == 0)
+
+                int checkId = Userservice.CheckID(userID);
+                if (checkId == 0)
+                {
+                    MessageBox.Show("ユーザーが存在しません");
+                    return;
+                }
+                //ID存在チェック　ここまで
+                #endregion
+                // IDとPWDの紐づきのデータ受け取り　ここから
+                int checkIdPwd = Userservice.CheckIdPwd(userID, userPassword);
+                // IDとPWDの紐づきのデータ受け取り　ここまで
+
+                //入力チェックここから
+                if (checkIdPwd == 0)
+                {
+                    MessageBox.Show("パスワードが間違っています");
+                    Historyservise.InsertLoginHistory(userID, false);
+                    return;
+                }
+                //入力チェックここまで
+
+
+                //IDのヒストリー直近3件取得ここから
+                List<DateTime> historyList = Historyservise.GetHistoryList(userID);
+                //IDのヒストリー直近3件取得ここまで
+
+                // ロックアウトの判断
+                Historyservise.LockoutJudgement(historyList, userID);
+
+            }
+            catch(Exception ex)
             {
-                MessageBox.Show("パスワードが間違っています");
-                Historyservise.InsertLoginHistory(userID, false);
-                return;
+                MessageBox.Show("エラーが発生しました" + ex.Message);
             }
-            //入力チェックここまで
-
-
-            //IDのヒストリー直近3件取得ここから
-            List<DateTime> historyList = Historyservise.GetHistoryList(userID);
-            //IDのヒストリー直近3件取得ここまで
-
-            // ロックアウトの判断
-            Historyservise.LockoutJudgement(historyList, userID);
-            
-
-            
-
-
         }
     }
     
