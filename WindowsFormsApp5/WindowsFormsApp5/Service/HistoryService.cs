@@ -70,32 +70,6 @@ namespace WindowsFormsApp5.service
         /// <returns>trueの場合、ロックアウト：falseの場合、ログイン成功。</returns>
         public static bool LockoutJudgement(List<DateTime> historyList, string userID)
         {
-            //historyListには3件の要素が入っている。降順で入っているので順序は[直近のミスの時間、2番目のミスの時間、最初のミスの時間]になる。
-            //historyList[0] - historyList[2]は、常に大きい値から小さい値を引くので、負の値になることはない。
-            //if (historyList.Count == Constants.ListElementsCount && (historyList[0] - historyList[2]).TotalMinutes <= Constants.LockoutTime)
-            //{
-            //    TimeSpan remainingLockout = TimeSpan.FromMinutes(Constants.LockoutTime) - (DateTime.Now - historyList[0]);
-            //    TimeSpan nowFailed = (DateTime.Now - historyList[0]);
-
-            //    if (nowFailed.Minutes <= Constants.LockoutTime)
-            //    {
-            //        MessageBox.Show($"あと {remainingLockout.Minutes} 分 {remainingLockout.Seconds} 秒、ログインが禁止されています。");
-            //        return true; 
-
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("ログイン成功");
-            //        InsertLoginHistory(userID, true);
-            //        return false;
-            //    }
-            //}
-            //else
-            //{
-            //    MessageBox.Show("ログイン成功");
-            //    InsertLoginHistory(userID, true);
-            //    return false; 
-            //}
 
             TimeSpan remainingLockout = TimeSpan.FromMinutes(Constants.LockoutTime) - (DateTime.Now - historyList[0]);
             TimeSpan nowFailed = (DateTime.Now - historyList[0]);

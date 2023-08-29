@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WindowsFormsApp5.Constant;
+
 
 namespace WindowsFormsApp5.userservice
 {
@@ -21,8 +23,7 @@ namespace WindowsFormsApp5.userservice
         public static int CheckID(string userID)
         {
             int idCount = 0;
-            const string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
             {
                 string idQuery = @"
                         SELECT
@@ -53,8 +54,7 @@ namespace WindowsFormsApp5.userservice
         public static int CheckIdPwd(string userID, string userPassword)
         {
             int pwdCount = 0;
-            const string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
             {
                 string pwdQuery = @"
                         SELECT 
