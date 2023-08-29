@@ -120,7 +120,8 @@ namespace WindowsFormsApp5.service
                             login_history 
                             (
                             userID
-                            , logtime, result
+                            , logtime
+                            , result
                             ) 
                        VALUES 
                             (

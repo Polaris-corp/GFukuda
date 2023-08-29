@@ -21,45 +21,27 @@ namespace WindowsFormsApp5.userservice
         public static int CheckID(string userID)
         {
             int idCount = 0;
-            string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
+            const string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                try
+                string idQuery = @"
+                        SELECT
+                            COUNT(*) 
+                        FROM    
+                            users 
+                        WHERE 
+                            ID = @userID";
+                using (MySqlCommand idCommand = new MySqlCommand(idQuery, connection))
                 {
-                    string idQuery = @"
-                           SELECT
-                               COUNT(*) 
-                           FROM 
-                               users 
-                           WHERE 
-                               ID = @userID";
-                    using (MySqlCommand idCommand = new MySqlCommand(idQuery, connection))
-                    {
-                        idCommand.Parameters.AddWithValue("@userID", userID);
+                    idCommand.Parameters.AddWithValue("@userID", userID);
 
-                        //接続開始
-                        connection.Open();
+                    //接続開始
+                    connection.Open();
 
-                        idCount = Convert.ToInt32(idCommand.ExecuteScalar());
-                        return idCount;
-                    }
-                }
-                catch (MySqlException ex)
-                {
-                    throw;
-                }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-                finally
-                {
-                    //接続解除
-                    connection.Close();
+                    idCount = Convert.ToInt32(idCommand.ExecuteScalar());
+                    return idCount;
                 }
             }
-
-
         }
 
         /// <summary>
@@ -71,48 +53,29 @@ namespace WindowsFormsApp5.userservice
         public static int CheckIdPwd(string userID, string userPassword)
         {
             int pwdCount = 0;
-            string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
+            const string connectionString = "Server=localhost;UID=pol05;Password=pol05;Database=test";
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                try
+                string pwdQuery = @"
+                        SELECT 
+                            COUNT(*) 
+                        FROM 
+                            users 
+                        WHERE 
+                            ID = @userID 
+                            AND PWD = @userPassword";
+                using (MySqlCommand pwdCommand = new MySqlCommand(pwdQuery, connection))
                 {
-                    string pwdQuery = @"
-                           SELECT 
-                                COUNT(*) 
-                           FROM 
-                                users 
-                           WHERE 
-                                ID = @userID 
-                                AND PWD = @userPassword";
+                    pwdCommand.Parameters.AddWithValue("@userID", userID);
+                    pwdCommand.Parameters.AddWithValue("@userpassword", userPassword);
+                    //接続開始
+                    connection.Open();
 
-                    using (MySqlCommand pwdCommand = new MySqlCommand(pwdQuery, connection))
-                    {
-                        pwdCommand.Parameters.AddWithValue("@userID", userID);
-                        pwdCommand.Parameters.AddWithValue("@userpassword", userPassword);
-                        //接続開始
-                        connection.Open();
-
-                        pwdCount = Convert.ToInt32(pwdCommand.ExecuteScalar());
-                        return pwdCount;
-                    }
-
+                    pwdCount = Convert.ToInt32(pwdCommand.ExecuteScalar());
+                    return pwdCount;
                 }
-                catch (MySqlException ex)
-                {
-                    throw;//保留
-                }
-                catch (Exception ex)
-                {
-                    throw;//保留
-                }
-                finally
-                {
-                    //接続解除
-                    connection.Close();
-                }
+                
             }
         }
-
-
     }
 }
