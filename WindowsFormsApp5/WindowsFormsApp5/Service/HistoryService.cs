@@ -70,19 +70,20 @@ namespace WindowsFormsApp5.service
         /// <returns>trueの場合、ロックアウト：falseの場合、ログイン成功。</returns>
         public static bool LockoutJudgement(List<DateTime> historyList, string userID)
         {
-            TimeSpan nowFailed = (DateTime.Now - historyList[0]);
-            if (historyList.Count == Constants.ListElementsCount && (historyList[0] - historyList[2]).TotalMinutes <= Constants.LockoutTime && nowFailed.Minutes <= Constants.LockoutTime)
+           
+            if (!(historyList.Count == Constants.ListElementsCount))
             {
                 return true;
             }
-            else if (historyList.Count == Constants.ListElementsCount && (historyList[0] - historyList[2]).TotalMinutes <= Constants.LockoutTime)
+
+            if ((historyList[0] - historyList[2]).TotalMinutes <= Constants.LockoutTime &&
+                (DateTime.Now - historyList[0]).Minutes <= Constants.LockoutTime)
             {
                 return false;
             }
-            else
-            {
-                return false;
-            }
+
+            return true;
+
         }
 
         /// <summary>

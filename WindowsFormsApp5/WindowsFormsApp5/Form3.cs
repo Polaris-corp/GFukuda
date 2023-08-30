@@ -72,12 +72,13 @@ namespace WindowsFormsApp5
 
                 if (Historyservise.LockoutJudgement(historyList, userID))
                 {
-                    MessageBox.Show($"あと {remainingLockout.Minutes} 分 {remainingLockout.Seconds} 秒、ログインが禁止されています。");
+                    MessageBox.Show("ログイン成功");
+                    Historyservise.InsertLoginHistory(userID, true); 
                 }
                 else
                 {
-                    MessageBox.Show("ログイン成功");
-                    Historyservise.InsertLoginHistory(userID, true);
+                    MessageBox.Show($"あと {remainingLockout.Minutes} 分 {remainingLockout.Seconds} 秒、ログインが禁止されています。");
+                    
                 }
 
             }
