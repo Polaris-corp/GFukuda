@@ -68,7 +68,7 @@ namespace WindowsFormsApp5.service
         /// </summary>
         /// <param name="historyList">直近三回の失敗logが入ったリストです。</param>
         /// <returns>trueの場合、ログイン成功：falseの場合、ロックアウト</returns>
-        public static bool LockoutJudgement(List<DateTime> historyList, string userID)
+        public static bool LockoutJudgement(List<DateTime> historyList)
         {
             TimeSpan missTimeDifference = historyList[0] - historyList[2];
             TimeSpan nowFailed = (DateTime.Now - historyList[0]);
