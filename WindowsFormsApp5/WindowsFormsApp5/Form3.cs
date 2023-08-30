@@ -70,7 +70,7 @@ namespace WindowsFormsApp5
                 // ロックアウトの判断
                 TimeSpan remainingLockout = TimeSpan.FromMinutes(Constants.LockoutTime) - (DateTime.Now - historyList[0]);
 
-                if (Historyservise.LockoutJudgement(historyList, userID))
+                if (Historyservise.LockoutJudgement(historyList))
                 {
                     MessageBox.Show("ログイン成功");
                     Historyservise.InsertLoginHistory(userID, true); 
