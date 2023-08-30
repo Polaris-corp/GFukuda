@@ -67,17 +67,19 @@ namespace WindowsFormsApp5.service
         /// ロックアウトになるか判断するメソッドです。
         /// </summary>
         /// <param name="historyList">直近三回の失敗logが入ったリストです。</param>
-        /// <returns>trueの場合、ロックアウト：falseの場合、ログイン成功。</returns>
+        /// <returns>trueの場合、ログイン成功：falseの場合、ロックアウト</returns>
         public static bool LockoutJudgement(List<DateTime> historyList, string userID)
         {
-           
-            if (!(historyList.Count == Constants.ListElementsCount))
+            TimeSpan missTimeDifference = historyList[0] - historyList[2];
+            TimeSpan nowFailed = (DateTime.Now - historyList[0]);
+
+            if (historyList.Count < Constants.ListElementsCount)
             {
                 return true;
             }
 
-            if ((historyList[0] - historyList[2]).TotalMinutes <= Constants.LockoutTime &&
-                (DateTime.Now - historyList[0]).Minutes <= Constants.LockoutTime)
+            if (missTimeDifference.TotalMinutes <= Constants.LockoutTime
+                && nowFailed.TotalMinutes <= Constants.LockoutTime)
             {
                 return false;
             }
