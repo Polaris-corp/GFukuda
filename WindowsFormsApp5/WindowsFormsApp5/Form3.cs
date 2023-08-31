@@ -30,7 +30,7 @@ namespace WindowsFormsApp5
 
             if (!GetIDPass.CheckIdPass(userID, userPassword))
             {
-                MessageBox.Show("入力してください");
+                MessageBox.Show(Constants.NonIdPwd);
                 return;
             }
             #endregion
@@ -44,7 +44,7 @@ namespace WindowsFormsApp5
                 int checkId = Userservice.CheckID(userID);
                 if (checkId == 0)
                 {
-                    MessageBox.Show("ユーザーが存在しません");
+                    MessageBox.Show(Constants.NonUserId);
                     return;
                 }
                 //ID存在チェック　ここまで
@@ -57,7 +57,7 @@ namespace WindowsFormsApp5
                 //入力チェックここから
                 if (checkIdPwd == 0)
                 {
-                    MessageBox.Show("パスワードが間違っています");
+                    MessageBox.Show(Constants.WrongPwd);
                     Historyservise.InsertLoginHistory(userID, false);
                     return;
                 }
@@ -72,18 +72,19 @@ namespace WindowsFormsApp5
                 // ロックアウトの判断
                 if (Historyservise.LockoutJudgement(historyList))
                 {
-                    MessageBox.Show("ログイン成功");
+                    MessageBox.Show(Constants.Success);
                     Historyservise.InsertLoginHistory(userID, true); 
                 }
                 else
                 {
                     TimeSpan remainingLockout = TimeSpan.FromMinutes(Constants.LockoutTime) - (DateTime.Now - historyList[0]);
-                    MessageBox.Show($"あと {remainingLockout.Minutes} 分 {remainingLockout.Seconds} 秒、ログインが禁止されています。");
+                    string lockoutMessage = string.Format(Constants.LoginBlock, remainingLockout.Minutes, remainingLockout.Seconds);
+                    MessageBox.Show(lockoutMessage);
                 }
             }
             catch(Exception ex)
             {
-                MessageBox.Show("エラーが発生しました" + ex.Message);
+                MessageBox.Show(Constants.ErrorOccurred + ex.Message);
             }
         }
     }
