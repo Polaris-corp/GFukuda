@@ -24,8 +24,6 @@ namespace WindowsFormsApp5
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DateTime clickTime = DateTime.Now;
-
             #region 値の取得と入力チェック
             string userID = textBox1.Text;
             string userPassword = textBox2.Text;
@@ -36,8 +34,6 @@ namespace WindowsFormsApp5
                 return;
             }
             #endregion
-
-
             try
             {
                 #region IDの存在チェック
@@ -56,6 +52,7 @@ namespace WindowsFormsApp5
                 int checkIdPwd = Userservice.CheckIdPwd(userID, userPassword);
                 // IDとPWDの紐づきのデータ受け取り　ここまで
 
+                DateTime clickTime = DateTime.Now;
                 //入力チェックここから
                 if (checkIdPwd == 0)
                 {
