@@ -17,9 +17,9 @@ namespace WindowsFormsApp5.service
     {
 
         /// <summary>
-        /// login_historyから、直近三回の失敗logを降順で保存するリストを作成するメソッドです。
+        /// login_historyから、直近三回のログイン失敗時のログを降順で最大3件保存するリストを作成するメソッド
         /// </summary>
-        /// <param name="userID">userIDが入ります</param>
+        /// <param name="userID">userID</param>
         /// <returns>作成したリスト</returns>
         public static List<DateTime> GetHistoryList(string userID)
         {
@@ -64,9 +64,12 @@ namespace WindowsFormsApp5.service
         }
 
         /// <summary>
-        /// ロックアウトになるか判断するメソッドです。
+        /// historyListが3件あるか
+        /// 直近のログイン失敗から3分以内に連続3回のログイン失敗をしているか
+        /// 直近のログイン失敗から3分経過しているか
+        /// を判定するメソッド
         /// </summary>
-        /// <param name="historyList">直近三回の失敗logが入ったリストです。</param>
+        /// <param name="historyList">直近三回の失敗logが入ったリスト</param>
         /// <returns>trueの場合、ログイン成功：falseの場合、ロックアウト</returns>
         public static bool LockoutJudgement(List<DateTime> historyList)
         {
@@ -91,10 +94,10 @@ namespace WindowsFormsApp5.service
         }
 
         /// <summary>
-        /// ログイン試行のログをlogin_historyテーブルに残すメソッド
+        /// ログイン試行のログをlogin_historyテーブルにインサートするメソッド
         /// </summary>
-        /// <param name="userID">userIDがはいります。</param>
-        /// <param name="loginResult">loginResultがはいります</param>
+        /// <param name="userID">userID</param>
+        /// <param name="loginResult">loginResult</param>
         public static void InsertLoginHistory(string userID, bool loginResult)
         {
             using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
