@@ -39,8 +39,6 @@ namespace WindowsFormsApp5
             //ID存在チェック　ここから
             try
             {
-
-
                 int checkId = Userservice.CheckID(userID);
                 if (checkId == 0)
                 {
@@ -67,9 +65,8 @@ namespace WindowsFormsApp5
                 List<DateTime> historyList = Historyservise.GetHistoryList(userID);
                 //IDのヒストリー直近3件取得ここまで
 
-                // ロックアウトの判断
-                TimeSpan remainingLockout = TimeSpan.FromMinutes(Constants.LockoutTime) - (DateTime.Now - historyList[0]);
 
+                // ロックアウトの判断
                 if (Historyservise.LockoutJudgement(historyList))
                 {
                     MessageBox.Show("ログイン成功");
@@ -77,10 +74,9 @@ namespace WindowsFormsApp5
                 }
                 else
                 {
+                    TimeSpan remainingLockout = TimeSpan.FromMinutes(Constants.LockoutTime) - (DateTime.Now - historyList[0]);
                     MessageBox.Show($"あと {remainingLockout.Minutes} 分 {remainingLockout.Seconds} 秒、ログインが禁止されています。");
-                    
                 }
-
             }
             catch(Exception ex)
             {
