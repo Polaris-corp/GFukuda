@@ -22,7 +22,6 @@ namespace WindowsFormsApp5.userservice
         /// <returns>入力されたIDの存在個数</returns>
         public static int CheckID(string userID)
         {
-            int idCount = 0;
             using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
             {
                 string idQuery = @"
@@ -39,7 +38,7 @@ namespace WindowsFormsApp5.userservice
                     //接続開始
                     connection.Open();
 
-                    idCount = Convert.ToInt32(idCommand.ExecuteScalar());
+                   int idCount = Convert.ToInt32(idCommand.ExecuteScalar());
                     return idCount;
                 }
             }
@@ -53,7 +52,6 @@ namespace WindowsFormsApp5.userservice
         /// <returns>userIDと紐づいているuserPasswordの存在個数</returns>
         public static int CheckIdPwd(string userID, string userPassword)
         {
-            int pwdCount = 0;
             using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
             {
                 string pwdQuery = @"
@@ -71,7 +69,7 @@ namespace WindowsFormsApp5.userservice
                     //接続開始
                     connection.Open();
 
-                    pwdCount = Convert.ToInt32(pwdCommand.ExecuteScalar());
+                   int pwdCount = Convert.ToInt32(pwdCommand.ExecuteScalar());
                     return pwdCount;
                 }
                 
