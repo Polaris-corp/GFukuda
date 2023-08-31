@@ -35,10 +35,12 @@ namespace WindowsFormsApp5
             }
             #endregion
 
-            #region IDの存在チェック
-            //ID存在チェック　ここから
+
             try
             {
+                #region IDの存在チェック
+                //ID存在チェック　ここから
+
                 int checkId = Userservice.CheckID(userID);
                 if (checkId == 0)
                 {
@@ -47,6 +49,7 @@ namespace WindowsFormsApp5
                 }
                 //ID存在チェック　ここまで
                 #endregion
+
                 // IDとPWDの紐づきのデータ受け取り　ここから
                 int checkIdPwd = Userservice.CheckIdPwd(userID, userPassword);
                 // IDとPWDの紐づきのデータ受け取り　ここまで
