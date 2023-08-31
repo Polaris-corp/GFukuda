@@ -28,7 +28,7 @@ namespace WindowsFormsApp5
             string userID = textBox1.Text;
             string userPassword = textBox2.Text;
 
-            if (!GetIDPass.CheckIdPass(userID, userPassword))
+            if (!Userservice.CheckIdPass(userID, userPassword))
             {
                 MessageBox.Show(Constants.NonIdPwd);
                 return;
