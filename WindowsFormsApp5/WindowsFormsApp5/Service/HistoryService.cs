@@ -100,8 +100,7 @@ namespace WindowsFormsApp5.service
             using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
             {
                 string insertQuery = @"
-                       INSERT 
-                       INTO 
+                       INSERT INTO 
                             login_history 
                             (
                             userID
