@@ -69,7 +69,7 @@ namespace WindowsFormsApp5.service
         /// 直近のログイン失敗から3分経過しているか
         /// を判定するメソッド
         /// </summary>
-        /// <param name="historyList">直近三回の失敗logが入ったリスト</param>
+        /// <param name="historyList">直近三回の失敗ログが入ったリスト</param>
         /// <returns>trueの場合、ログイン成功：falseの場合、ロックアウト</returns>
         public static bool LockoutJudgement(List<DateTime> historyList)
         {
