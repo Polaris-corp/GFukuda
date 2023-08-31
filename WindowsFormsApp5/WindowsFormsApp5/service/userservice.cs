@@ -18,8 +18,8 @@ namespace WindowsFormsApp5.userservice
         /// <summary>
         /// 入力されたuserIDがusersテーブルに存在するか確認するメソッド
         /// </summary>
-        /// <param name="userID">userIDがはいります。</param>
-        /// <returns>入力されたIDの存在個数</returns>
+        /// <param name="userID">userID</param>
+        /// <returns>入力されたIDのデータ個数</returns>
         public static int CheckID(string userID)
         {
             using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
@@ -45,11 +45,11 @@ namespace WindowsFormsApp5.userservice
         }
 
         /// <summary>
-        /// 入力されたuserPasswordがuserIDと紐づいているか確認するメソッド
+        /// 入力されたuserPasswordと入力されたuserIDが紐づいているデータの個数を取得するメソッド
         /// </summary>
-        /// <param name="userID">userIDがはいります。</param>
-        /// <param name="userPassword">userPasswordがはいります。</param>
-        /// <returns>userIDと紐づいているuserPasswordの存在個数</returns>
+        /// <param name="userID">userID</param>
+        /// <param name="userPassword">userPassword</param>
+        /// <returns>userIDと紐づいているuserPasswordのデータ個数</returns>
         public static int CheckIdPwd(string userID, string userPassword)
         {
             using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
