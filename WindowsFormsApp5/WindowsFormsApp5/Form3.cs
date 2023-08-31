@@ -24,6 +24,8 @@ namespace WindowsFormsApp5
 
         private void button1_Click(object sender, EventArgs e)
         {
+            DateTime clickTime = DateTime.Now;
+
             #region 値の取得と入力チェック
             string userID = textBox1.Text;
             string userPassword = textBox2.Text;
@@ -58,7 +60,7 @@ namespace WindowsFormsApp5
                 if (checkIdPwd == 0)
                 {
                     MessageBox.Show(Constants.WrongPwd);
-                    Historyservise.InsertLoginHistory(userID, false);
+                    Historyservise.InsertLoginHistory(userID, false, clickTime);
                     return;
                 }
                 //入力チェックここまで
@@ -70,14 +72,14 @@ namespace WindowsFormsApp5
 
 
                 // ロックアウトの判断
-                if (Historyservise.LockoutJudgement(historyList))
+                if (Historyservise.LockoutJudgement(historyList, clickTime))
                 {
                     MessageBox.Show(Constants.Success);
-                    Historyservise.InsertLoginHistory(userID, true); 
+                    Historyservise.InsertLoginHistory(userID, true, clickTime); 
                 }
                 else
                 {
-                    TimeSpan remainingLockout = TimeSpan.FromMinutes(Constants.LockoutTime) - (DateTime.Now - historyList[0]);
+                    TimeSpan remainingLockout = TimeSpan.FromMinutes(Constants.LockoutTime) - (clickTime - historyList[0]);
                     string lockoutMessage = string.Format(Constants.LoginBlock, remainingLockout.Minutes, remainingLockout.Seconds);
                     MessageBox.Show(lockoutMessage);
                 }

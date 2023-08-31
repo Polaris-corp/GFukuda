@@ -72,7 +72,6 @@ namespace WindowsFormsApp5.userservice
                    int pwdCount = Convert.ToInt32(pwdCommand.ExecuteScalar());
                     return pwdCount;
                 }
-                
             }
         }
     }

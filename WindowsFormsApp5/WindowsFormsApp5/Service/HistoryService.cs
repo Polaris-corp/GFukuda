@@ -71,7 +71,7 @@ namespace WindowsFormsApp5.service
         /// </summary>
         /// <param name="historyList">直近三回の失敗ログが入ったリスト</param>
         /// <returns>trueの場合、ログイン成功：falseの場合、ロックアウト</returns>
-        public static bool LockoutJudgement(List<DateTime> historyList)
+        public static bool LockoutJudgement(List<DateTime> historyList, DateTime clickTime)
         {
             if (historyList.Count < Constants.ListElementsCount)
             {
@@ -84,7 +84,7 @@ namespace WindowsFormsApp5.service
                 return true;
             }
 
-            TimeSpan nowFailed = (DateTime.Now - historyList[0]);
+            TimeSpan nowFailed = (clickTime - historyList[0]);
             if (Constants.LockoutTime < nowFailed.TotalMinutes)
             {
                 return true;
@@ -98,7 +98,7 @@ namespace WindowsFormsApp5.service
         /// </summary>
         /// <param name="userID">userID</param>
         /// <param name="loginResult">loginResult</param>
-        public static void InsertLoginHistory(string userID, bool loginResult)
+        public static void InsertLoginHistory(string userID, bool loginResult,DateTime clickTime)
         {
             using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
             {
@@ -119,7 +119,7 @@ namespace WindowsFormsApp5.service
                 using (MySqlCommand insertCommand = new MySqlCommand(insertQuery, connection))
                 {
                     insertCommand.Parameters.AddWithValue("@userID", userID);
-                    insertCommand.Parameters.AddWithValue("@logtime", DateTime.Now);
+                    insertCommand.Parameters.AddWithValue("@logtime", clickTime);
                     insertCommand.Parameters.AddWithValue("@result", loginResult ? 1 : 0);
                     // 接続を開始します。
                     connection.Open();
