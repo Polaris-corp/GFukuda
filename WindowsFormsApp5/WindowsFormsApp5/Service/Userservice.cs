@@ -36,7 +36,7 @@ namespace WindowsFormsApp5.userservice
                     idCommand.Parameters.AddWithValue("@userID", userID);
                     //接続開始
                     connection.Open();
-                   return Convert.ToInt32(idCommand.ExecuteScalar()) == 0;
+                   return Convert.ToBoolean(idCommand.ExecuteScalar());
                 }
             }
         }
@@ -65,11 +65,10 @@ namespace WindowsFormsApp5.userservice
                     pwdCommand.Parameters.AddWithValue("@userpassword", userPassword);
                     //接続開始
                     connection.Open();
-                    return Convert.ToInt32(pwdCommand.ExecuteScalar()) == 0;
+                    return Convert.ToBoolean(pwdCommand.ExecuteScalar());
                 }
             }
         }
-
         /// <summary>
         /// 入力チェックを行う
         /// </summary>
