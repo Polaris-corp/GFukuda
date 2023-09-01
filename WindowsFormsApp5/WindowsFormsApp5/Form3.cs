@@ -38,9 +38,7 @@ namespace WindowsFormsApp5
             {
                 #region IDの存在チェック
                 //ID存在チェック　ここから
-
-                int checkId = Userservice.CheckID(userID);
-                if (checkId == 0)
+                if (Userservice.CheckID(userID) == 0)
                 {
                     MessageBox.Show(Constants.NonUserId);
                     return;
@@ -48,25 +46,19 @@ namespace WindowsFormsApp5
                 //ID存在チェック　ここまで
                 #endregion
 
-                // IDとPWDの紐づきのデータ受け取り　ここから
-                int checkIdPwd = Userservice.CheckIdPwd(userID, userPassword);
-                // IDとPWDの紐づきのデータ受け取り　ここまで
-
                 DateTime clickTime = DateTime.Now;
-                //入力チェックここから
-                if (checkIdPwd == 0)
+                //IDとPWDの紐づきのデータ受け取りと入力チェックここから
+                if (Userservice.CheckIdPwd(userID, userPassword) == 0)
                 {
                     MessageBox.Show(Constants.WrongPwd);
                     Historyservise.InsertLoginHistory(userID, false, clickTime);
                     return;
                 }
-                //入力チェックここまで
-
+                //IDとPWDの紐づきのデータ受け取りと入力チェックここまで
 
                 //IDのヒストリー直近3件取得ここから
                 List<DateTime> historyList = Historyservise.GetHistoryList(userID);
                 //IDのヒストリー直近3件取得ここまで
-
 
                 // ロックアウトの判断
                 if (Historyservise.LockoutJudgement(historyList, clickTime))
