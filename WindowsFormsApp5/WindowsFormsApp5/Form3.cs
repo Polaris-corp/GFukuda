@@ -60,7 +60,7 @@ namespace WindowsFormsApp5
                 List<DateTime> historyList = Historyservise.GetHistoryList(userID);
                 //IDのヒストリー直近3件取得ここまで
 
-                // ロックアウトの判断
+                // ログイン制限が掛かるか否かのチェックとログイン成功出来るか否かのチェック
                 if (Historyservise.LockoutJudgement(historyList, clickTime))
                 {
                     MessageBox.Show(Constants.Success);

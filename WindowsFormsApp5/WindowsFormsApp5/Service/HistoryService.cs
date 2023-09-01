@@ -26,7 +26,7 @@ namespace WindowsFormsApp5.service
             List<DateTime> failedLogins = new List<DateTime>();
             using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
             {
-                // 直近の3回のログイン試行を確認　ORDER BY logtime DESC LIMIT 3で直近三回
+                // 直近の3回のログイン試行データを3つ、降順で確認　
                 string historyQuery = @"
                            SELECT 
                                 logtime
@@ -45,14 +45,12 @@ namespace WindowsFormsApp5.service
 
                     //接続開始
                     connection.Open();
-                    // SQLクエリを実行
                     var reader = historyCommand.ExecuteReader();
-                    // クエリの結果を読む
                     while (reader.Read())
                     {
+                        // 失敗したログインの場合、リストに追加
                         if (reader.GetInt32("result") == 0)
                         {
-                            // 失敗したログインの場合、リストに追加
                             DateTime logtime = reader.GetDateTime("logtime");
                             failedLogins.Add(logtime);
                         }
@@ -121,12 +119,11 @@ namespace WindowsFormsApp5.service
                     insertCommand.Parameters.AddWithValue("@userID", userID);
                     insertCommand.Parameters.AddWithValue("@logtime", clickTime);
                     insertCommand.Parameters.AddWithValue("@result", loginResult ? 1 : 0);
-                    // 接続を開始します。
+                    // 接続開始
                     connection.Open();
                     insertCommand.ExecuteNonQuery();
                 }
             }
         }
-
     }
 }
