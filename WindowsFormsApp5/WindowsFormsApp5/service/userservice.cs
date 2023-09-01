@@ -34,12 +34,9 @@ namespace WindowsFormsApp5.userservice
                 using (MySqlCommand idCommand = new MySqlCommand(idQuery, connection))
                 {
                     idCommand.Parameters.AddWithValue("@userID", userID);
-
                     //接続開始
                     connection.Open();
-
-                   int idCount = Convert.ToInt32(idCommand.ExecuteScalar());
-                    return idCount;
+                   return Convert.ToInt32(idCommand.ExecuteScalar());
                 }
             }
         }
