@@ -38,7 +38,7 @@ namespace WindowsFormsApp5
             {
                 #region IDの存在チェック
                 //ID存在チェック　ここから
-                if (Userservice.CheckID(userID) == 0)
+                if (Userservice.CheckID(userID))
                 {
                     MessageBox.Show(Constants.NonUserId);
                     return;
@@ -48,7 +48,7 @@ namespace WindowsFormsApp5
 
                 DateTime clickTime = DateTime.Now;
                 //IDとPWDの紐づきのデータ受け取りと入力チェックここから
-                if (Userservice.CheckIdPwd(userID, userPassword) == 0)
+                if (Userservice.CheckIdPwd(userID, userPassword))
                 {
                     MessageBox.Show(Constants.WrongPwd);
                     Historyservise.InsertLoginHistory(userID, false, clickTime);

@@ -20,7 +20,7 @@ namespace WindowsFormsApp5.userservice
         /// </summary>
         /// <param name="userID">userID</param>
         /// <returns>入力されたIDのデータ個数</returns>
-        public static int CheckID(string userID)
+        public static bool CheckID(string userID)
         {
             using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
             {
@@ -36,7 +36,7 @@ namespace WindowsFormsApp5.userservice
                     idCommand.Parameters.AddWithValue("@userID", userID);
                     //接続開始
                     connection.Open();
-                   return Convert.ToInt32(idCommand.ExecuteScalar());
+                   return Convert.ToInt32(idCommand.ExecuteScalar()) == 0;
                 }
             }
         }
@@ -47,7 +47,7 @@ namespace WindowsFormsApp5.userservice
         /// <param name="userID">userID</param>
         /// <param name="userPassword">userPassword</param>
         /// <returns>userIDと紐づいているuserPasswordのデータ個数</returns>
-        public static int CheckIdPwd(string userID, string userPassword)
+        public static bool CheckIdPwd(string userID, string userPassword)
         {
             using (MySqlConnection connection = new MySqlConnection(Constants.ConnectionString))
             {
@@ -65,9 +65,7 @@ namespace WindowsFormsApp5.userservice
                     pwdCommand.Parameters.AddWithValue("@userpassword", userPassword);
                     //接続開始
                     connection.Open();
-
-                   int pwdCount = Convert.ToInt32(pwdCommand.ExecuteScalar());
-                    return pwdCount;
+                    return Convert.ToInt32(pwdCommand.ExecuteScalar()) == 0;
                 }
             }
         }
